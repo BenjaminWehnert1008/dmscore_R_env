@@ -1,5 +1,5 @@
 package:
-  name: dmscore_R_env
+  name: dmscore_r_env
   version: "1.0.0"
 
 source:
