@@ -15,10 +15,6 @@ build:
 requirements:
   build:
     - r-base >=4.4
-    - libcurl  # System dependency: Equals libcurl4-openssl-dev
-    - libxml2  # System dependency
-    - zlib     # System dependency
-    - openssl  # System dependency
   run:
     - r-base >=4.4
     - r-dplyr ==1.1.4
