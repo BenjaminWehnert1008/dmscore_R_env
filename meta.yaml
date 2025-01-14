@@ -15,12 +15,16 @@ build:
 requirements:
   build:
     - r-base >=4.4
-    - libcurl  # System dependency: Equals libcurl4-openssl-dev
-    - libxml2  # System dependency
-    - zlib     # System dependency
-    - openssl  # System dependency
+    - libcurl >=7.61.1
+    - libxml2 >=2.9.4
+    - zlib >=1.2.11
+    - openssl >=1.0.2l
   run:
     - r-base >=4.4
+    - libcurl >=7.61.1
+    - libxml2 >=2.9.4
+    - zlib >=1.2.11
+    - openssl >=1.0.2l
     - r-dplyr ==1.1.4
     - r-ggplot2 ==3.5.1
     - r-scales ==1.3.0
@@ -34,4 +38,4 @@ requirements:
 about:
   home: https://github.com/BenjaminWehnert1008/dmscore_R_env.git
   license: MIT
-  summary: "Environment with R scripts and packages for R processes in dmscore pipeline"
+  summary: "Environment for R scripts and packages required for dmscore pipeline"
