@@ -2,36 +2,14 @@
 # output: csv with column names. Creates additional counts_per_cov column. Fills pos_mut column for synonymous mutations. Sorted out variants that have mutations, but do not show up in the specifying columns -> was affecting roughly 30 low-count variants out of over 15000 in Taylor's data
 
 library("dplyr")
-# Define a function that processes the GATK data
 process_raw_gatk <- function(gatk_file_path, output_csv_path) {
-  # Read the GATK file into a data frame
-  gatk_raw <- read.table(gatk_file_path, sep = "\t", header = FALSE, fill = TRUE)
 
   # Set the column names
-  colnames(gatk_raw) <- c("counts", "cov", "mean_length_variant_reads", "varying_bases",
+  colnames <- c("counts", "cov", "mean_length_variant_reads", "varying_bases",
                           "base_mut", "varying_codons", "codon_mut", "aa_mut", "pos_mut")
 
-  # Filter out rows where 'aa_mut' is empty or NA
-  gatk_raw <- gatk_raw[!(gatk_raw$aa_mut == "" | is.na(gatk_raw$aa_mut)), ]
-
-  gatk_raw <- gatk_raw %>%
-    mutate(counts_per_cov = counts / cov)
-
-  # Write the cleaned data frame to a CSV file
-  write.csv(gatk_raw, file = output_csv_path, row.names = FALSE)
-}
-
-
-
-
-
-process_raw_gatk <- function(gatk_file_path, output_csv_path) {
   # Read the GATK file into a data frame
-  gatk_raw <- read.table(gatk_file_path, sep = "\t", header = FALSE, fill = TRUE)
-
-  # Set the column names
-  colnames(gatk_raw) <- c("counts", "cov", "mean_length_variant_reads", "varying_bases",
-                          "base_mut", "varying_codons", "codon_mut", "aa_mut", "pos_mut")
+  gatk_raw <- read.table(gatk_file_path, sep = "\t", header = FALSE, fill = TRUE, col.names = colnames)
 
   # Filter out rows where 'aa_mut' is empty or NA
   gatk_raw <- gatk_raw[!(gatk_raw$aa_mut == "" | is.na(gatk_raw$aa_mut)), ]
@@ -61,7 +39,7 @@ process_raw_gatk <- function(gatk_file_path, output_csv_path) {
 
 
 
-# Example usage (commented out, can be used for testing):
+# Example usage (can be used for testing):
 # process_raw_gatk("/path/to/gatk_file.txt", "/path/to/output_file.csv")
 #process_raw_gatk("/Users/benjaminwehnert/CRG/DMS_QC/testing_data/output_premerged_vsearch.variantCounts", "/Users/benjaminwehnert/CRG/DMS_QC/testing_data/raw_gatk.csv")
 

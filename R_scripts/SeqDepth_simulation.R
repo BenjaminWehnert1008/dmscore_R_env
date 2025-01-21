@@ -1,17 +1,17 @@
-# input: prefiltered (by codon library) gatk path, possible NNK mutations path, output_folder, reduction_fraction (steps in % to reduce counts), threshold to count variant as present in dataset
+# input: prefiltered (by codon library) gatk path, possible mutations path, output_folder, reduction_fraction (steps in % to reduce counts), threshold to count variant as present in dataset
 # output: pdf showing the plot
 # limitation: takes quite a lot time: depends on number of counts in prefiltered gatk (4 min on M1 MacBook for 340,000 counts in total) -> reduction_fraction only has a low impact -> need to find more efficient random-sampling algorithm
 
 library(dplyr)
 library(ggplot2)
 
-SeqDepth_simulation_plot <- function(prefiltered_gatk_path, possible_NNK_mutations_path, output_file_path, reduction_fraction = 0.01, threshold = 3) {
+SeqDepth_simulation_plot <- function(prefiltered_gatk_path, possible_mutations_path, output_file_path, reduction_fraction = 0.01, threshold = 3) {
 
   # Read data from the specified CSV file
   data <- read.csv(prefiltered_gatk_path)
   data <- data %>% mutate(counts = as.numeric(counts)) # Ensure counts are numeric
   original_counts <- data$counts # Store the original counts for weight calculations
-  possible_NNK_mutations <- read.csv(possible_NNK_mutations_path)
+  possible_mutations <- read.csv(possible_mutations_path)
 
   # Initialize variables
   total_counts <- sum(data$counts)
@@ -77,7 +77,7 @@ SeqDepth_simulation_plot <- function(prefiltered_gatk_path, possible_NNK_mutatio
   plot_data <- results %>%
     mutate(
       remaining_counts_fold = round(remaining_counts / baseline_count, 2),  # X-axis in fold-change from max, rounded to 2 decimals
-      remaining_variants_percent = (remaining_variants / nrow(possible_NNK_mutations)) * 100  # Y-axis in percent
+      remaining_variants_percent = (remaining_variants / nrow(possible_mutations)) * 100  # Y-axis in percent
     )
 
   # Set plot limits
@@ -119,7 +119,7 @@ SeqDepth_simulation_plot <- function(prefiltered_gatk_path, possible_NNK_mutatio
 #Example usage with input and output paths
 # results_weighted <- coverage_simulation_plot(
 #   prefiltered_gatk_path = "/Users/benjaminwehnert/CRG/DMS_QC/testing_data/gatk_filtered_by_codon_library.csv",
-#   possible_NNK_mutations_path = "/Users/benjaminwehnert/CRG/DMS_QC/testing_data/possible_NNK_mutations.csv",
+#   possible_mutations_path = "/Users/benjaminwehnert/CRG/DMS_QC/testing_data/possible_mutations.csv",
 #   output_folder = "/Users/benjaminwehnert/CRG/DMS_QC/testing_data/testing_outputs",
 #   reduction_fraction = 0.01,
 #   threshold = 3
